@@ -111,3 +111,27 @@ def load_status():
         "load": load,
         "status": status
     }
+@app.get("/recommendation")
+def recommendation():
+
+    db = SessionLocal()
+
+    meter = db.query(MeterData).order_by(MeterData.id.desc()).first()
+
+    if not meter:
+        return {"message": "No data found"}
+
+    load = meter.voltage * meter.current
+
+    if load > 1500:
+        recommendation = "Shift load to another feeder"
+    elif load > 1000:
+        recommendation = "Monitor load closely"
+    else:
+        recommendation = "Load is normal"
+
+    return {
+        "meter_id": meter.meter_id,
+        "load": load,
+        "recommendation": recommendation
+    }
