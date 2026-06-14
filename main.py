@@ -89,7 +89,17 @@ def get_meter_data(db: Session = Depends(get_db)):
     return result
 @app.get("/load-status")
 def load_status():
+    total_voltage = 220
+    total_current = 5
+
+    load = total_voltage * total_current
+
+    if load > 1000:
+        status = "High Load"
+    else:
+        status = "Normal Load"
+
     return {
-        "status": "Normal",
-        "message": "Load Balancing API Working"
+        "load": load,
+        "status": status
     }
