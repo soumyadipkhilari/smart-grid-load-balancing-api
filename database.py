@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "postgresql://postgres:Sk268dip%40@127.0.0.1:5432/smartgrid"
+DATABASE_URL = "sqlite:///./smartgrid.db"
 
 engine = create_engine(DATABASE_URL)
 
