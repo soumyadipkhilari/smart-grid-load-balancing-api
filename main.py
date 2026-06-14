@@ -135,3 +135,23 @@ def recommendation():
         "load": load,
         "recommendation": recommendation
     }
+@app.get("/dashboard")
+def dashboard():
+
+    db = SessionLocal()
+
+    total_meters = db.query(MeterData).count()
+
+    latest_meter = db.query(MeterData).order_by(MeterData.id.desc()).first()
+
+    if not latest_meter:
+        return {"message": "No data available"}
+
+    load = latest_meter.voltage * latest_meter.current
+
+    return {
+        "total_meters": total_meters,
+        "latest_meter": latest_meter.meter_id,
+        "current_load": load,
+        "status": "High Load" if load > 1000 else "Normal Load"
+    }
