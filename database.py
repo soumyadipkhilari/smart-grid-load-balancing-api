@@ -16,3 +16,12 @@ from models import Base
 Base.metadata.create_all(bind=engine)
 
 print("Table Created Successfully")
+from sqlalchemy.orm import Session
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+        
