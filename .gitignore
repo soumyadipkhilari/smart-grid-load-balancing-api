@@ -2,3 +2,6 @@ __pycache/
 *.pyc
 venv/
 .env
+pycache/
+*.pyc
+smartgrid.db
