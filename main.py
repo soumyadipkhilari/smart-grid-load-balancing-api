@@ -179,3 +179,11 @@ def alert():
         "load": load,
         "alert_level": alert
     }
+@app.get("/history")
+def history():
+
+    db = SessionLocal()
+
+    meters = db.query(MeterData).all()
+
+    return meters
