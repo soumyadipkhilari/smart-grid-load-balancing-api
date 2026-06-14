@@ -87,3 +87,9 @@ def get_meter_data(db: Session = Depends(get_db)):
         })
 
     return result
+@app.get("/load-status")
+def load_status():
+    return {
+        "status": "Normal",
+        "message": "Load Balancing API Working"
+    }
