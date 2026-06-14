@@ -187,3 +187,28 @@ def history():
     meters = db.query(MeterData).all()
 
     return meters
+@app.get("/peak-load")
+def peak_load():
+
+    db = SessionLocal()
+
+    meters = db.query(MeterData).all()
+
+    if not meters:
+        return {"message": "No data available"}
+
+    peak_meter = None
+    peak_load = 0
+
+    for meter in meters:
+
+        load = meter.voltage * meter.current
+
+        if load > peak_load:
+            peak_load = load
+            peak_meter = meter
+
+    return {
+        "meter_id": peak_meter.meter_id,
+        "peak_load": peak_load
+    }
