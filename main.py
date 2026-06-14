@@ -87,19 +87,27 @@ def get_meter_data(db: Session = Depends(get_db)):
         })
 
     return result
+from database import SessionLocal
+from models import MeterData
+
 @app.get("/load-status")
 def load_status():
-    total_voltage = 220
-    total_current = 5
 
-    load = total_voltage * total_current
+    db = SessionLocal()
 
-    if load > 1000:
-        status = "High Load"
-    else:
-        status = "Normal Load"
+    meter = db.query(MeterData).order_by(MeterData.id.desc()).first()
+
+    if not meter:
+        return {"message": "No meter data found"}
+
+    load = meter.voltage * meter.current
+
+    status = "High Load" if load > 1000 else "Normal Load"
 
     return {
+        "meter_id": meter.meter_id,
+        "voltage": meter.voltage,
+        "current": meter.current,
         "load": load,
         "status": status
     }
