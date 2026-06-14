@@ -155,3 +155,27 @@ def dashboard():
         "current_load": load,
         "status": "High Load" if load > 1000 else "Normal Load"
     }
+@app.get("/alert")
+def alert():
+
+    db = SessionLocal()
+
+    meter = db.query(MeterData).order_by(MeterData.id.desc()).first()
+
+    if not meter:
+        return {"message": "No data available"}
+
+    load = meter.voltage * meter.current
+
+    if load > 1500:
+        alert = "CRITICAL"
+    elif load > 1000:
+        alert = "WARNING"
+    else:
+        alert = "NORMAL"
+
+    return {
+        "meter_id": meter.meter_id,
+        "load": load,
+        "alert_level": alert
+    }
