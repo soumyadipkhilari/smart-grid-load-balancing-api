@@ -1,4 +1,4 @@
-
+from tasks import calculate_load_task
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
@@ -212,3 +212,11 @@ def peak_load():
         "meter_id": peak_meter.meter_id,
         "peak_load": peak_load
     }
+@app.post("/background-load")
+def background_load(data: MeterReading):
+    task = calculate_load_task.delay(data.voltage, data.current)
+
+    return {
+        "message": "Background load calculation started",
+        "task_id": task.id
+    }  
